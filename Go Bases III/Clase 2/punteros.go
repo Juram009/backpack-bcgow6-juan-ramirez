@@ -1,4 +1,5 @@
 package main
+
 import "fmt"
 
 func main() {
@@ -12,8 +13,9 @@ func main() {
 	fmt.Printf("Valor: %d\n", numero)
 	fmt.Printf("La direccion es: %p\n", p3)
 	fmt.Printf("La direccion es: %p\n", &numero)
+
 }
 
-func Incrementar(puntero *int){
-	*puntero = 20 
+func Incrementar(puntero *int) {
+	*puntero = 20
 }

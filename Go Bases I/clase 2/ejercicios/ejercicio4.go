@@ -1,29 +1,31 @@
 package main
+
 import "fmt"
 
 var employees = map[string]int{"Benjamin": 20, "Nahuel": 26, "Brenda": 19, "Darío": 44, "Pedro": 30}
-func main(){
+
+func main() {
 	fmt.Println("La edad de Benjamin es:", employees["Benjamin"], "años")
 	ages21()
-	addFede
+	addFede()
 	deletePedro()
 }
 
-func ages21(){
+func ages21() {
 	ages := 0
 	for key := range employees {
-		if employees[key] > 21{
+		if employees[key] > 21 {
 			ages++
 		}
-	} 
+	}
 	fmt.Println("Hay", ages, "empleados mayores de 21 años")
 }
 
-func addFede(){
+func addFede() {
 	employees["Federico"] = 25
 	fmt.Println(employees)
 }
-func deletePedro(){
-	delete(employees,"Pedro")
+func deletePedro() {
+	delete(employees, "Pedro")
 	fmt.Println(employees)
 }

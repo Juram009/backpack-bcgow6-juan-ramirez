@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"math/rand"
 	"os"
+	"time"
 )
 
 type Producto struct {
@@ -13,6 +14,7 @@ type Producto struct {
 }
 
 func main() {
+	rand.Seed(time.Now().UnixNano())
 	var productos []Producto
 	for i := 0; i < 10; i++ {
 		p := Producto{

@@ -17,6 +17,9 @@ func main() {
 	}
 	bkng := service.NewBookings(tickets)
 	ticket, err = bkng.Read(1)
+	if err != nil {
+		panic(err)
+	}
 	ticket, err = bkng.Update(5, service.Ticket{
 		Id:          5,
 		Names:       "a",
@@ -25,7 +28,13 @@ func main() {
 		Date:        "13:45",
 		Price:       3,
 	})
+	if err != nil {
+		panic(err)
+	}
 	ticket, err = bkng.Read(5)
+	if err != nil {
+		panic(err)
+	}
 	ticket, err = bkng.Create(service.Ticket{
 		Names:       "a",
 		Email:       "a@a.a",
@@ -33,8 +42,17 @@ func main() {
 		Date:        "13:45",
 		Price:       3,
 	})
+	if err != nil {
+		panic(err)
+	}
 	id, err := bkng.Delete(5)
+	if err != nil {
+		panic(err)
+	}
 	ticket, err = bkng.Read(id)
+	if err != nil {
+		panic(err)
+	}
 	fmt.Println(ticket, err)
 	f.Write(bkng.Reader())
 }

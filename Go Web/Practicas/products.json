@@ -1,0 +1,10 @@
+{
+    "id": "12345",
+    "nombre": "Macbook Pro",
+    "color": "Plateado",
+    "precio": 14000000,
+    "stock": 48,
+    "codigo": "AG458GER23",
+    "publicado": true,
+    "fechaDeCreacion": "13/05/2021"
+}

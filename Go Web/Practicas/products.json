@@ -1,4 +1,4 @@
-{
+[{
     "id": "12345",
     "nombre": "Macbook Pro",
     "color": "Plateado",
@@ -7,4 +7,4 @@
     "codigo": "AG458GER23",
     "publicado": true,
     "fechaDeCreacion": "13/05/2021"
-}
+}]

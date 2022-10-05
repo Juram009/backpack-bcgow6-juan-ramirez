@@ -28,7 +28,7 @@ func main() {
 	for i := 0; i < len(productos); i++ {
 		txt += fmt.Sprintf("%d;%d;%d\n", productos[i].Id, productos[i].Precio, productos[i].Cantidad)
 		e := os.WriteFile(
-			"./productos.csv",
+			"../productos.csv",
 			[]byte(txt),
 			0644,
 		)

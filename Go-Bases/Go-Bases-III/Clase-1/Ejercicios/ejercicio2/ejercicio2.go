@@ -10,7 +10,7 @@ import (
 func main() {
 	var sum int
 	var res string
-	fileContentAsBytes, err := os.ReadFile("./productos.csv")
+	fileContentAsBytes, err := os.ReadFile("../productos.csv")
 	if err != nil {
 		panic("Error leyendo el archivo")
 	} else {

@@ -3,13 +3,16 @@ package main
 import (
 	"github.com/Juram009/backpack-bcgow6-juan-ramirez/Go-Web/Project/cmd/server/handler"
 	"github.com/Juram009/backpack-bcgow6-juan-ramirez/Go-Web/Project/internal/products"
+	"github.com/Juram009/backpack-bcgow6-juan-ramirez/Go-Web/Project/pkg/store"
 	"github.com/gin-gonic/gin"
+	"github.com/joho/godotenv"
 )
 
 func main() {
-	repo := products.NewRepository()
+	_ = godotenv.Load()
+	db := store.New(store.FileType, "./products.json")
+	repo := products.NewRepository(db)
 	service := products.NewService(repo)
-
 	product := handler.NewProduct(service)
 
 	route := gin.Default()

@@ -28,7 +28,7 @@ func (s *service) GetAll() ([]Product, error) {
 }
 
 func (s *service) GetOne(id int) (Product, error) {
-	ps, err := s.repository.GetOne(lastID)
+	ps, err := s.repository.GetOne(id)
 	if err != nil {
 		return Product{}, err
 	}
@@ -41,9 +41,7 @@ func (s *service) Store(name, color string, price, stock int, code string, publi
 		return Product{}, err
 	}
 
-	lastID++
-
-	producto, err := s.repository.Store(lastID, name, color, price, stock, code, published, creationDate)
+	producto, err := s.repository.Store(lastID+1, name, color, price, stock, code, published, creationDate)
 	if err != nil {
 		return Product{}, err
 	}

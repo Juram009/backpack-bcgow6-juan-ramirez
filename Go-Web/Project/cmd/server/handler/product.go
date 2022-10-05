@@ -2,6 +2,7 @@ package handler
 
 import (
 	"net/http"
+	"os"
 	"strconv"
 
 	"github.com/Juram009/backpack-bcgow6-juan-ramirez/Go-Web/Project/internal/products"
@@ -37,7 +38,7 @@ func NewProduct(p products.Service) *Product {
 func (p *Product) GetAll() gin.HandlerFunc {
 	return func(ctx *gin.Context) {
 		token := ctx.Request.Header.Get("token")
-		if token != "12345" {
+		if token != os.Getenv("TOKEN") {
 			ctx.JSON(http.StatusUnauthorized, gin.H{
 				"Error": "Invalid Token",
 			})
@@ -58,7 +59,7 @@ func (p *Product) GetAll() gin.HandlerFunc {
 func (p *Product) GetOne() gin.HandlerFunc {
 	return func(ctx *gin.Context) {
 		token := ctx.Request.Header.Get("token")
-		if token != "12345" {
+		if token != os.Getenv("TOKEN") {
 			ctx.JSON(http.StatusUnauthorized, gin.H{
 				"Error": "Invalid Token",
 			})
@@ -79,7 +80,7 @@ func (p *Product) GetOne() gin.HandlerFunc {
 func (p *Product) Store() gin.HandlerFunc {
 	return func(ctx *gin.Context) {
 		token := ctx.Request.Header.Get("token")
-		if token != "12345" {
+		if token != os.Getenv("TOKEN") {
 			ctx.JSON(http.StatusUnauthorized, gin.H{"Error": "Invalid Token"})
 			return
 		}
@@ -100,7 +101,7 @@ func (p *Product) Store() gin.HandlerFunc {
 func (p *Product) Update() gin.HandlerFunc {
 	return func(ctx *gin.Context) {
 		token := ctx.GetHeader("token")
-		if token != "12345" {
+		if token != os.Getenv("TOKEN") {
 			ctx.JSON(http.StatusUnauthorized, gin.H{"error": "Invalid Token"})
 			return
 		}
@@ -129,7 +130,7 @@ func (p *Product) Update() gin.HandlerFunc {
 
 func (p *Product) Delete(c *gin.Context) {
 	token := c.GetHeader("token")
-	if token != "12345" {
+	if token != os.Getenv("TOKEN") {
 		c.JSON(http.StatusUnauthorized, gin.H{"Error": "Invalid Token"})
 		return
 	}
@@ -152,7 +153,7 @@ func (p *Product) Delete(c *gin.Context) {
 func (p *Product) UpdateNamePrice() gin.HandlerFunc {
 	return func(c *gin.Context) {
 		token := c.GetHeader("token")
-		if token != "12345" {
+		if token != os.Getenv("TOKEN") {
 			c.JSON(http.StatusUnauthorized, gin.H{"Error": "Invalid Token"})
 			return
 		}

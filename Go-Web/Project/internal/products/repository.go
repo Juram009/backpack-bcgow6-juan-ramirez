@@ -69,8 +69,6 @@ func (r *repository) GetOne(id int) (Product, error) {
 		return Product{}, err
 	}
 	for i := range products {
-		fmt.Println(products[i].Id)
-		fmt.Println(id)
 		if products[i].Id == id {
 			return products[i], nil
 		}

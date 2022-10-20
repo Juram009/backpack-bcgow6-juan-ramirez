@@ -1,0 +1,16 @@
+1- ¿Cuales son las diferencias entre whitebox y blackbox?
+Rta. En el blackbox testing, la persona que testea no conoce el funcionamiento o diseño interno del codigo, mientras que en el whitebox si se conoce, por lo que se utilizan a tests diferentes, de manera que se aplican funcionales, no funcionales y regresión en el blackbox, mientras los test unitarios y los de integración se aplica por medio de whitebox
+
+2- ¿Qué es un test funcional?
+Rta. Son los test basados en entrada y salida de información, por lo que el fin de este test es comprobar las respuestas del codigo en cada escenario
+
+3- ¿Qué es un test de integración?
+Rta. Son los test que prueba la comunicación entre los componentes y capas, el fin del test es comprobar la interaccion con bases de datos o asegurar que los microservicios funcionen de manera correcta
+
+4- Indicar las dimensiones de calidad prioritarias en MELI.
+Rta. 
+- Funcionality: Para que el producto funcione de manera correcta, satisfaciendo las necesidades que se pretenden suplir con las implementaciones
+- Performance: Representa el desempeño relacionado con la cantidad de recursos utilizados
+- Reliability: Capacidad del sistema de funcionar cuando se necesite cuando se usa bajo ciertas condiciones o un periodo de tiempo determinado
+- Security: Capacidad del sistema de proteger información y datos del sistema o de los usuarios, asi como anticipar posibles ataques que se puedan presentar
+- Maintainability: Capacidad del sistema para ser modificado cuando se necesite, atendiendo las necesidades que se presenten en un futuro

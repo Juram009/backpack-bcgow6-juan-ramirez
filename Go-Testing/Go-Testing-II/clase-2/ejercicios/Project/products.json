@@ -1,0 +1,22 @@
+[
+  {
+    "id": 1,
+    "name": "Macbook Pro",
+    "color": "Plateado",
+    "price": 14000,
+    "stock": 48,
+    "code": "AG458GER23",
+    "published": true,
+    "date": "13/05/2021"
+  },
+  {
+    "id": 2,
+    "name": "Macbook Pro",
+    "color": "Plateado",
+    "price": 14000,
+    "stock": 48,
+    "code": "AG458GER23",
+    "published": true,
+    "date": "13/05/2021"
+  }
+]

@@ -1,4 +1,4 @@
-package ejercicio_3
+package ejercicio3
 
 import "fmt"
 

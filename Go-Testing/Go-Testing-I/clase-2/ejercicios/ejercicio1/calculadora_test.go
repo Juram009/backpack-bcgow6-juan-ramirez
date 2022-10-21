@@ -1,4 +1,4 @@
-package ejercicio_1
+package ejercicio1
 
 import (
 	"testing"

@@ -1,4 +1,4 @@
-package ejercicio_2
+package ejercicio2
 
 func burbuja(list []int) []int {
 	var aux int

@@ -1,0 +1,2 @@
+Tomé la tabla que daban de factura y lo descompusé en tres tablas relacionadas entre si, separando entre factura, 
+producto y cliente, de manera que hubiera un buen manejo de datos.

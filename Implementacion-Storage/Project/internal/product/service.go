@@ -11,6 +11,7 @@ type Service interface {
 	GetAll(ctx context.Context) ([]domain.Product, error)
 	Get(ctx context.Context, id int) (domain.Product, error)
 	Save(ctx context.Context, b domain.Product) (domain.Product, error)
+	Delete(ctx context.Context, id int64) error
 }
 
 type service struct {
@@ -49,4 +50,8 @@ func (s *service) Save(ctx context.Context, p domain.Product) (domain.Product, e
 	}
 	p.ID = int(id)
 	return p, nil
+}
+
+func (s *service) Delete(ctx context.Context, id int64) error {
+	return s.repo.Delete(ctx, id)
 }

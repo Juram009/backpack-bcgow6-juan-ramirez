@@ -3,6 +3,7 @@ package product
 import (
 	"context"
 	"database/sql"
+	"errors"
 
 	"github.com/Juram009/backpack-bcgow6-juan-ramirez/Implementacion-Storage/Project/internal/domain"
 )
@@ -12,8 +13,8 @@ type Repository interface {
 	Get(ctx context.Context, id int) (domain.Product, error)
 	Save(ctx context.Context, b domain.Product) (int64, error)
 	Exists(ctx context.Context, id int) bool
+	Delete(ctx context.Context, id int64) error
 	//Update(ctx context.Context, b domain.Product, id int) error
-	//Delete(ctx context.Context, id int64) error
 }
 
 type repository struct {
@@ -33,7 +34,9 @@ const (
 
 	GET_PRODUCT = "SELECT id, name, type, count, price FROM products WHERE id=?;"
 
-	EXIST_MOVIE = "SELECT id FROM products WHERE id=?"
+	EXIST_MOVIE = "SELECT id FROM products WHERE id=?;"
+
+	DELETE_PRODUCT = "DELETE FROM products WHERE id=?;"
 )
 
 func (r *repository) Exists(ctx context.Context, id int) bool {
@@ -88,4 +91,27 @@ func (r *repository) Get(ctx context.Context, id int) (domain.Product, error) {
 		return domain.Product{}, err
 	}
 	return product, nil
+}
+
+func (r *repository) Delete(ctx context.Context, id int64) error {
+	stm, err := r.db.Prepare(DELETE_PRODUCT)
+	if err != nil {
+		return err
+	}
+	defer stm.Close()
+
+	result, err := stm.Exec(id)
+	if err != nil {
+		return err
+	}
+
+	affected, err := result.RowsAffected()
+	if err != nil {
+		return err
+	}
+	if affected != 1 {
+		return errors.New("error: no affected rows")
+	}
+
+	return nil
 }

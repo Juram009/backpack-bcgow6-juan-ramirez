@@ -64,3 +64,19 @@ func (p *Product) Create() gin.HandlerFunc {
 		ctx.JSON(http.StatusOK, gin.H{"product": product.Name + " added"})
 	}
 }
+
+func (p *Product) Delete() gin.HandlerFunc {
+	return func(ctx *gin.Context) {
+		id, err := strconv.ParseInt((ctx.Param("id")), 10, 64)
+		if err != nil {
+			ctx.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+			return
+		}
+		err = p.service.Delete(ctx, id)
+		if err != nil {
+			ctx.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+			return
+		}
+		ctx.JSON(http.StatusNoContent, gin.H{"delete": id})
+	}
+}

@@ -182,36 +182,17 @@ func TestUpdate(t *testing.T) {
 	defer db.Close()
 
 	t.Run("Update Ok", func(t *testing.T) {
-		mock.ExpectPrepare(regexp.QuoteMeta(SAVE_PRODUCT))
-		mock.ExpectExec(regexp.QuoteMeta(SAVE_PRODUCT)).WillReturnResult(sqlmock.NewResult(1, 1))
-		columns := []string{"id", "name", "type", "count", "price", "id_warehouse"}
-		rows := sqlmock.NewRows(columns)
-		rows.AddRow(product_test.ID, product_test.Name, product_test.Type, product_test.Count, product_test.Price, product_test.IDWarehouse)
-
 		mock.ExpectPrepare(regexp.QuoteMeta(UPDATE_PRODUCT))
-		mock.ExpectExec(regexp.QuoteMeta(UPDATE_PRODUCT)).WillReturnResult(sqlmock.NewResult(1, 1))
-		columns = []string{"id", "name", "type", "count", "price", "id_warehouse"}
-		rows = sqlmock.NewRows(columns)
-		rows.AddRow(product_test.ID, "Mesaa", product_test.Type, product_test.Count, product_test.Price, product_test.IDWarehouse)
+		mock.ExpectExec(regexp.QuoteMeta(UPDATE_PRODUCT)).WithArgs(product_test.Name, product_test.Type, product_test.Count, product_test.Price, product_test.IDWarehouse, product_test.ID).WillReturnResult(sqlmock.NewResult(0, 1))
 
-		mock.ExpectQuery(regexp.QuoteMeta(GET_PRODUCT)).WithArgs(1).WillReturnRows(rows)
+		//mock.ExpectQuery(regexp.QuoteMeta(GET_PRODUCT)).WithArgs(1).WillReturnRows(rows)
 
 		repository := NewRepository(db)
 		ctx := context.TODO()
 
-		newID, err := repository.Save(ctx, product_test)
+		err = repository.Update(ctx, product_test, int(product_test.ID))
 		assert.NoError(t, err)
-		product_test.Name = "Mesaa"
-
-		err = repository.Update(ctx, product_test, int(newID))
-		assert.NoError(t, err)
-
-		res, err := repository.Get(ctx, int(newID))
-		assert.NoError(t, err)
-		assert.NotNil(t, res)
-		assert.Equal(t, product_test.ID, res.ID)
 		assert.NoError(t, mock.ExpectationsWereMet())
-		assert.Equal(t, product_test, res)
 	})
 
 	t.Run("Update Fail", func(t *testing.T) {
@@ -228,7 +209,7 @@ func TestUpdate(t *testing.T) {
 		err = repository.Update(ctx, product_test, product_test.ID)
 
 		assert.EqualError(t, err, errUpdating.Error())
-		//assert.Empty(t,id)
+
 		assert.NoError(t, mock.ExpectationsWereMet())
 	})
 }
@@ -239,32 +220,15 @@ func TestDelete(t *testing.T) {
 	defer db.Close()
 
 	t.Run("Delete Ok", func(t *testing.T) {
-		mock.ExpectPrepare(regexp.QuoteMeta(SAVE_PRODUCT))
-		mock.ExpectExec(regexp.QuoteMeta(SAVE_PRODUCT)).WillReturnResult(sqlmock.NewResult(1, 1))
-		columns := []string{"id", "name", "type", "count", "price", "id_warehouse"}
-		rows := sqlmock.NewRows(columns)
-		rows.AddRow(product_test.ID, product_test.Name, product_test.Type, product_test.Count, product_test.Price, product_test.IDWarehouse)
-
 		mock.ExpectPrepare(regexp.QuoteMeta(DELETE_PRODUCT))
-		mock.ExpectExec(regexp.QuoteMeta(DELETE_PRODUCT)).WithArgs(1).WillReturnResult(sqlmock.NewResult(1, 1))
-		rows = sqlmock.NewRows([]string{})
-		mock.ExpectQuery(regexp.QuoteMeta(GET_PRODUCT)).WithArgs(1).WillReturnRows(rows)
+		mock.ExpectExec(regexp.QuoteMeta(DELETE_PRODUCT)).WithArgs(product_test.ID).WillReturnResult(sqlmock.NewResult(0, 1))
 
 		repository := NewRepository(db)
 		ctx := context.TODO()
 
-		newID, err := repository.Save(ctx, product_test)
+		err = repository.Delete(ctx, int64(product_test.ID))
 		assert.NoError(t, err)
-
-		err = repository.Delete(ctx, newID)
-		assert.NoError(t, err)
-
-		res, err := repository.Get(ctx, int(newID))
-		assert.Error(t, err)
-		assert.NotNil(t, res)
-		assert.NotEqual(t, product_test.ID, res.ID)
 		assert.NoError(t, mock.ExpectationsWereMet())
-		assert.Equal(t, domain.Product{}, res)
 	})
 
 	t.Run("Update Fail", func(t *testing.T) {

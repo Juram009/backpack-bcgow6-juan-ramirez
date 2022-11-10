@@ -14,7 +14,7 @@ type Repository interface {
 	Save(ctx context.Context, b domain.Product) (int64, error)
 	Exists(ctx context.Context, id int) bool
 	Delete(ctx context.Context, id int64) error
-	//Update(ctx context.Context, b domain.Product, id int) error
+	Update(ctx context.Context, b domain.Product, id int) error
 }
 
 type repository struct {
@@ -28,19 +28,21 @@ func NewRepository(db *sql.DB) Repository {
 }
 
 const (
-	SAVE_PRODUCT = "INSERT INTO products (name, type, count, price) VALUES (?,?,?,?);"
+	SAVE_PRODUCT = "INSERT INTO products (name, type, count, price, id_warehouse) VALUES (?,?,?,?,?);"
 
 	GET_ALL_PRODUCTS = "SELECT id , name, type, count, price FROM products;"
 
-	GET_PRODUCT = "SELECT id, name, type, count, price FROM products WHERE id=?;"
+	GET_PRODUCT = "SELECT id, name, type, count, price, id_warehouse FROM products WHERE id=?;"
 
-	EXIST_MOVIE = "SELECT id FROM products WHERE id=?;"
+	EXIST_PRODUCT = "SELECT id FROM products WHERE id=?;"
 
 	DELETE_PRODUCT = "DELETE FROM products WHERE id=?;"
+
+	UPDATE_PRODUCT = "UPDATE products SET name=?, type=?, count=?, price=?, id_warehouse=? WHERE id=?;"
 )
 
 func (r *repository) Exists(ctx context.Context, id int) bool {
-	rows := r.db.QueryRow(EXIST_MOVIE, id)
+	rows := r.db.QueryRow(EXIST_PRODUCT, id)
 	err := rows.Scan(&id)
 	return err == nil
 }
@@ -55,7 +57,7 @@ func (r *repository) GetAll(ctx context.Context) ([]domain.Product, error) {
 
 	for rows.Next() {
 		var product domain.Product
-		if err := rows.Scan(&product.ID, &product.Name, &product.Type, &product.Count, &product.Price); err != nil {
+		if err := rows.Scan(&product.ID, &product.Name, &product.Type, &product.Count, &product.Price, &product.IDWarehouse); err != nil {
 			return []domain.Product{}, err
 		}
 		products = append(products, product)
@@ -70,7 +72,7 @@ func (r *repository) Save(ctx context.Context, p domain.Product) (int64, error) 
 	}
 
 	//ejecutamos la consulta con aquellos valores a remplazar en la sentencia
-	res, err := stm.Exec(p.Name, p.Type, p.Count, p.Price)
+	res, err := stm.Exec(p.Name, p.Type, p.Count, p.Price, p.IDWarehouse)
 	if err != nil {
 		return 0, err
 	}
@@ -87,10 +89,33 @@ func (r *repository) Save(ctx context.Context, p domain.Product) (int64, error) 
 func (r *repository) Get(ctx context.Context, id int) (domain.Product, error) {
 	row := r.db.QueryRow(GET_PRODUCT, id)
 	var product domain.Product
-	if err := row.Scan(&product.ID, &product.Name, &product.Type, &product.Count, &product.Price); err != nil {
+	if err := row.Scan(&product.ID, &product.Name, &product.Type, &product.Count, &product.Price, &product.IDWarehouse); err != nil {
 		return domain.Product{}, err
 	}
 	return product, nil
+}
+
+func (r *repository) Update(ctx context.Context, p domain.Product, id int) error {
+	stm, err := r.db.Prepare(UPDATE_PRODUCT)
+	if err != nil {
+		return err
+	}
+	defer stm.Close() //cerramos para no perder memoria
+
+	//ejecutamos la consulta con aquellos valores a remplazar en la sentencia
+	result, err := stm.Exec(p.Name, p.Type, p.Count, p.Price, p.IDWarehouse, id)
+	if err != nil {
+		return err
+	}
+
+	affected, err := result.RowsAffected()
+	if err != nil {
+		return err
+	}
+	if affected < 1 {
+		return errors.New("error: no affected rows")
+	}
+	return nil
 }
 
 func (r *repository) Delete(ctx context.Context, id int64) error {

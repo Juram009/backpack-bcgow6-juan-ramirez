@@ -65,6 +65,30 @@ func (p *Product) Create() gin.HandlerFunc {
 	}
 }
 
+func (p *Product) Update() gin.HandlerFunc {
+	return func(ctx *gin.Context) {
+		id, err := strconv.Atoi(ctx.Param("id"))
+		if err != nil {
+			ctx.JSON(404, gin.H{"error": "invalid ID"})
+			return
+		}
+		var product domain.Product
+		err = ctx.ShouldBindJSON(&product)
+		if err != nil {
+			ctx.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+			return
+		}
+
+		product, err = p.service.Update(ctx, product, id)
+		if err != nil {
+			ctx.JSON(http.StatusBadRequest, err)
+			return
+		}
+		product.ID = id
+		ctx.JSON(http.StatusOK, gin.H{"movie": product})
+	}
+}
+
 func (p *Product) Delete() gin.HandlerFunc {
 	return func(ctx *gin.Context) {
 		id, err := strconv.ParseInt((ctx.Param("id")), 10, 64)
